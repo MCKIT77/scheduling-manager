@@ -15,7 +15,7 @@ $(document).ready(function () {
 
 
     var hourId = $(this).parent().attr('id');
-    var descrVal = $('.description').val();
+    var descrVal = $(this).siblings('.description').val()
 
 
     localStorage.setItem(hourId, descrVal);
@@ -31,32 +31,25 @@ $(document).ready(function () {
   // attribute of each time-block be used to do this?
   //
   // TODO: Add code to display the current date in the header of the page.
+
   function hourUpdater() {
     var currentHour = dayjs().hour();
-    var currentBlock = $(`#hour-${currentHour}`);
-    // loop over time blocks
+
     $('.time-block').each(function () {
-      var timeBlockIdArray = $(".time-block").attr('id').split('');
-      var timeBlockSlice = timeBlockIdArray.slice(5, timeBlockIdArray.length);
+      var timeBlockId = $(this).attr('id');
+      var timeBlockHour = timeBlockId.slice(5);
 
-
-
-      if (+currentHour === +timeBlockSlice) {
-
-
-        currentBlock.addClass('present');
-        if (+currentHour < +timeblockSlice) {
-          $('.time-block').addClass('future');
-        }
-      } else if (currentHour < +timeBlockSlice) {
-        $('.time-block').removeClass('present');
-        $('.time-block').addClass('future');
+      if (currentHour === +timeBlockHour) {
+        $(this).removeClass('past future').addClass('present');
+      } else if (currentHour < +timeBlockHour) {
+        $(this).removeClass('past present').addClass('future');
       } else {
-        $('.time-block').removeClass('future');
-        $('.time-block').addClass('past');
+        $(this).removeClass('present future').addClass('past');
       }
     });
   }
+
+
   hourUpdater();
   setInterval(hourUpdater, 15000);
   // load any saved data from localStorage
